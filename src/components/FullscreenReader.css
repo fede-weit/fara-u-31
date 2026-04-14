@@ -1,0 +1,220 @@
+.fullscreen-reader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at 70% 50%, #0a0a1a 0%, #000008 100%);
+  overflow: hidden;
+}
+
+.reader-background {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 70% 50%, #0a0a1a 0%, #000008 100%);
+  pointer-events: none;
+}
+
+.reader-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 100;
+  width: 50px;
+  height: 50px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 24px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.fullscreen-reader:hover .reader-close {
+  display: flex;
+}
+
+.reader-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  transform: scale(1.1);
+}
+
+.reader-header {
+  display: none;
+}
+
+.reader-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Book wrapper */
+.book-wrapper {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 80px 20px;
+}
+
+/* Single image wrapper - for stories with only one image */
+.single-image-wrapper {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 0 20px;
+}
+
+.single-image {
+  max-width: 90%;
+  max-height: 90%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Page styles - following the reference implementation */
+.page {
+  background: linear-gradient(145deg, #ffffff 0%, #f8f5f0 100%);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.page-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  overflow: hidden;
+}
+
+.page-content img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
+.page-empty {
+  background: linear-gradient(135deg, #f8f5f0 0%, #e8e4da 100%);
+  color: rgba(139, 90, 43, 0.3);
+  font-size: 2rem;
+  font-style: italic;
+  font-weight: 300;
+}
+
+/* Navigation buttons */
+.reader-nav {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 20px;
+  z-index: 100;
+}
+
+.nav-button {
+  padding: 12px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 30px;
+  background: rgba(0, 0, 0, 0.5);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nav-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #fff;
+}
+
+/* Instruction */
+.reader-instruction {
+  position: absolute;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 20px;
+  background: rgba(0, 0, 0, 0.4);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.8rem;
+  border-radius: 20px;
+  pointer-events: none;
+  animation: fadeOut 5s ease-in-out forwards;
+}
+
+@keyframes fadeOut {
+  0%, 70% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Empty state */
+.reader-empty {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.reader-empty h2 {
+  margin: 0 0 16px;
+  font-size: 2rem;
+  font-weight: 300;
+}
+
+.reader-empty p {
+  margin: 0;
+  opacity: 0.6;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .reader-nav {
+    bottom: 20px;
+    gap: 10px;
+  }
+
+  .nav-button {
+    padding: 10px 18px;
+    font-size: 0.8rem;
+  }
+
+  .reader-header h1 {
+    font-size: 1.2rem;
+  }
+
+  .reader-instruction {
+    bottom: 70px;
+    font-size: 0.75rem;
+  }
+  
+  .book-wrapper {
+    padding: 60px 10px;
+  }
+}

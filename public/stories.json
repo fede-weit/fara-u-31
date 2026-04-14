@@ -1,0 +1,340 @@
+﻿[
+  {
+    "id": "story-01",
+    "title": "Brenches",
+    "tagline": "",
+    "summary": "",
+    "summaryLong": "",
+    "era": "",
+    "themes": [],
+    "cover": "",
+    "coverAlt": "",
+    "audio": "assets/audio/stories/story-01/albergo-magic.mp3",
+    "audioLabel": "Tema di Brenches",
+    "audioSettings": {
+      "loop": true,
+      "elementVolume": 1,
+      "initialGain": 0.25,
+      "fadeTargetGain": 0.65,
+      "sustainGain": 0.6,
+      "fadeDuration": 6
+    },
+    "preferredTheme": "dark",
+    "gallery": [],
+    "route": "stories/story-template.html#story-01",
+    "location": {
+      "name": "Brenches",
+      "latitude": 40.0,
+      "longitude": -100.0
+    }
+  },
+  {
+    "id": "story-02",
+    "title": "A vision",
+    "tagline": "",
+    "summary": "",
+    "summaryLong": "",
+    "era": "",
+    "themes": [],
+    "cover": "assets/images/stories/story-02/pagina-01.jpg",
+    "coverAlt": "Tavola 01 di A vision",
+    "audio": "assets/audio/stories/story-02/secondo.mp3",
+    "audioLabel": "Tema di A vision",
+    "audioSettings": {
+      "loop": true,
+      "elementVolume": 1,
+      "initialGain": 0.25,
+      "fadeTargetGain": 0.65,
+      "sustainGain": 0.6,
+      "fadeDuration": 6
+    },
+    "preferredTheme": "dark",
+    "gallery": [
+      {
+        "src": "assets/images/stories/story-02/pagina-01.jpg",
+        "alt": "Tavola 01 di A vision",
+        "caption": ""
+      }
+    ],
+    "route": "stories/story-template.html#story-02",
+    "location": {
+      "name": "A vision",
+      "latitude": -15.0,
+      "longitude": -60.0
+    }
+  },
+  {
+    "id": "story-03",
+    "title": "Desert",
+    "tagline": "",
+    "summary": "",
+    "summaryLong": "",
+    "era": "",
+    "themes": [],
+    "cover": "assets/images/stories/story-03/pagina-01.jpg",
+    "coverAlt": "Tavola 01 di Desert",
+    "audio": "assets/audio/stories/story-03/roba-strana.mp3",
+    "audioLabel": "Tema di Desert",
+    "audioSettings": {
+      "loop": true,
+      "elementVolume": 1,
+      "initialGain": 0.25,
+      "fadeTargetGain": 0.65,
+      "sustainGain": 0.6,
+      "fadeDuration": 6
+    },
+    "preferredTheme": "dark",
+    "gallery": [
+      {
+        "src": "assets/images/stories/story-03/pagina-01.jpg",
+        "alt": "Tavola 01 di Desert",
+        "caption": ""
+      }
+    ],
+    "route": "stories/story-template.html#story-03",
+    "location": {
+      "name": "Desert",
+      "latitude": 50.0,
+      "longitude": 10.0
+    }
+  },
+  {
+    "id": "story-04",
+    "title": "Riva",
+    "tagline": "",
+    "summary": "",
+    "summaryLong": "",
+    "era": "",
+    "themes": [],
+    "cover": "assets/images/stories/story-04/pagina-01.jpg",
+    "coverAlt": "Tavola 01 di Riva",
+    "audio": "assets/audio/stories/story-04/piano-ending-manga.mp3",
+    "audioLabel": "Tema di Riva",
+    "audioSettings": {
+      "loop": true,
+      "elementVolume": 1,
+      "initialGain": 0.25,
+      "fadeTargetGain": 0.65,
+      "sustainGain": 0.6,
+      "fadeDuration": 6
+    },
+    "preferredTheme": "dark",
+    "gallery": [
+      {
+        "src": "assets/images/stories/story-04/pagina-01.jpg",
+        "alt": "Tavola 01 di Riva",
+        "caption": ""
+      }
+    ],
+    "route": "stories/story-template.html#story-04",
+    "location": {
+      "name": "Riva",
+      "latitude": 0.0,
+      "longitude": 20.0
+    }
+  },
+  {
+    "id": "story-05",
+    "title": "Peaks",
+    "tagline": "",
+    "summary": "",
+    "summaryLong": "",
+    "era": "",
+    "themes": [],
+    "cover": "assets/images/stories/story-05/pagina-01.jpg",
+    "coverAlt": "Tavola 01 di Peaks",
+    "audio": "assets/audio/stories/story-05/prova-microfoni.mp3",
+    "audioLabel": "Tema di Peaks",
+    "audioSettings": {
+      "loop": true,
+      "elementVolume": 1,
+      "initialGain": 0.25,
+      "fadeTargetGain": 0.65,
+      "sustainGain": 0.6,
+      "fadeDuration": 6
+    },
+    "preferredTheme": "dark",
+    "gallery": [
+      {
+        "src": "assets/images/stories/story-05/pagina-01.jpg",
+        "alt": "Tavola 01 di Peaks",
+        "caption": ""
+      }
+    ],
+    "route": "stories/story-template.html#story-05",
+    "location": {
+      "name": "Peaks",
+      "latitude": 25.0,
+      "longitude": 50.0
+    }
+  },
+  {
+    "id": "story-06",
+    "title": "Shrine",
+    "tagline": "",
+    "summary": "",
+    "summaryLong": "",
+    "era": "",
+    "themes": [],
+    "cover": "assets/images/stories/story-06/pagina-01.jpg",
+    "coverAlt": "Tavola 01 di Shrine",
+    "audio": "assets/audio/stories/story-06/sempre-piano.mp3",
+    "audioLabel": "Tema di Shrine",
+    "audioSettings": {
+      "loop": true,
+      "elementVolume": 1,
+      "initialGain": 0.25,
+      "fadeTargetGain": 0.65,
+      "sustainGain": 0.6,
+      "fadeDuration": 6
+    },
+    "preferredTheme": "dark",
+    "gallery": [
+      {
+        "src": "assets/images/stories/story-06/pagina-01.jpg",
+        "alt": "Tavola 01 di Shrine",
+        "caption": ""
+      }
+    ],
+    "route": "stories/story-template.html#story-06",
+    "location": {
+      "name": "Shrine",
+      "latitude": 20.0,
+      "longitude": 80.0
+    }
+  },
+  {
+    "id": "story-07",
+    "title": "Underwater",
+    "tagline": "",
+    "summary": "",
+    "summaryLong": "",
+    "era": "",
+    "themes": [],
+    "cover": "assets/images/stories/story-07/pagina-01.jpg",
+    "coverAlt": "Tavola 01 di Underwater",
+    "audio": "assets/audio/stories/story-07/looooppps-21-01.mp3",
+    "audioLabel": "Tema di Underwater",
+    "audioSettings": {
+      "loop": true,
+      "elementVolume": 1,
+      "initialGain": 0.25,
+      "fadeTargetGain": 0.65,
+      "sustainGain": 0.6,
+      "fadeDuration": 6
+    },
+    "preferredTheme": "dark",
+    "gallery": [
+      {
+        "src": "assets/images/stories/story-07/pagina-01.jpg",
+        "alt": "Tavola 01 di Underwater",
+        "caption": ""
+      }
+    ],
+    "route": "stories/story-template.html#story-07",
+    "location": {
+      "name": "Underwater",
+      "latitude": -5.0,
+      "longitude": 120.0
+    }
+  },
+  {
+    "id": "story-08",
+    "title": "Swamp",
+    "tagline": "",
+    "summary": "",
+    "summaryLong": "",
+    "era": "",
+    "themes": [],
+    "cover": "assets/images/stories/story-08/pagina-01.jpeg",
+    "coverAlt": "Tavola 01 di Swamp",
+    "audio": "assets/audio/stories/story-08/lows.mp3",
+    "audioLabel": "Tema di Swamp",
+    "audioSettings": {
+      "loop": true,
+      "elementVolume": 1,
+      "initialGain": 0.25,
+      "fadeTargetGain": 0.65,
+      "sustainGain": 0.6,
+      "fadeDuration": 6
+    },
+    "preferredTheme": "dark",
+    "gallery": [
+      {
+        "src": "assets/images/stories/story-08/pagina-01.jpeg",
+        "alt": "Tavola 01 di Swamp",
+        "caption": ""
+      }
+    ],
+    "route": "stories/story-template.html#story-08",
+    "location": {
+      "name": "Swamp",
+      "latitude": 35.0,
+      "longitude": 135.0
+    }
+  },
+  {
+    "id": "story-09",
+    "title": "Fumes",
+    "tagline": "",
+    "summary": "",
+    "summaryLong": "",
+    "era": "",
+    "themes": [],
+    "cover": "assets/images/stories/story-09/pagina-01.jpeg",
+    "coverAlt": "Tavola 01 di Fumes",
+    "audio": "assets/audio/stories/story-09/ygintro2.mp3",
+    "audioLabel": "Tema di Fumes",
+    "audioSettings": {
+      "loop": true,
+      "elementVolume": 1,
+      "initialGain": 0.25,
+      "fadeTargetGain": 0.65,
+      "sustainGain": 0.6,
+      "fadeDuration": 6
+    },
+    "preferredTheme": "dark",
+    "gallery": [
+      {
+        "src": "assets/images/stories/story-09/pagina-01.jpeg",
+        "alt": "Tavola 01 di Fumes",
+        "caption": ""
+      }
+    ],
+    "route": "stories/story-template.html#story-09",
+    "location": {
+      "name": "Fumes",
+      "latitude": -30.0,
+      "longitude": 150.0
+    }
+  },
+  {
+    "id": "story-10",
+    "title": "What once was",
+    "tagline": "",
+    "summary": "",
+    "summaryLong": "",
+    "era": "",
+    "themes": [],
+    "cover": "",
+    "coverAlt": "",
+    "audio": "assets/audio/stories/story-10/nonpiano.mp3",
+    "audioLabel": "Tema di What once was",
+    "audioSettings": {
+      "loop": true,
+      "elementVolume": 1,
+      "initialGain": 0.25,
+      "fadeTargetGain": 0.65,
+      "sustainGain": 0.6,
+      "fadeDuration": 6
+    },
+    "preferredTheme": "dark",
+    "gallery": [],
+    "route": "stories/story-template.html#story-10",
+    "location": {
+      "name": "What once was",
+      "latitude": -60.0,
+      "longitude": 170.0
+    }
+  }
+]
