@@ -13,6 +13,7 @@ export function HomePage() {
   const [readerStory, setReaderStory] = useState<Story | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [globeResetKey, setGlobeResetKey] = useState(0);
+  const [globeAutoRotate, setGlobeAutoRotate] = useState(true);
 
   // Helper to resolve public asset paths (same logic used elsewhere)
   function resolveAssetPath(path: string): string {
@@ -118,88 +119,136 @@ export function HomePage() {
         </header>
 
         {/* Story Info */}
-        <div className="story-info">
+        <div
+          className="story-info"
+          style={
+            selectedStory
+              ? ({
+                  '--story-accent':
+                    selectedStory.markerColor || getStoryColor(selectedStory.id) || '#c2d3cd',
+                } as React.CSSProperties)
+              : undefined
+          }
+        >
           {selectedStory ? (
             <>
+              <p className="story-kicker">Location attiva</p>
               <div className="story-header">
-                <span 
+                <span
                   className="story-dot"
-                  style={{ background: selectedStory.markerColor || getStoryColor(selectedStory.id) || undefined }}
+                  style={{
+                    background:
+                      selectedStory.markerColor || getStoryColor(selectedStory.id) || undefined,
+                  }}
                 />
-                <div>
-                  {selectedStory.era && (
+                <div className="story-header-text">
+                  {selectedStory.era ? (
                     <p className="story-era">{selectedStory.era}</p>
-                  )}
-                  <h2 
+                  ) : null}
+                  <h2
                     className="story-title"
-                    style={{ color: selectedStory.markerColor || getStoryColor(selectedStory.id) || undefined }}
+                    style={{
+                      color: selectedStory.markerColor || getStoryColor(selectedStory.id) || undefined,
+                    }}
                   >
                     {selectedStory.title}
                   </h2>
+                  {selectedStory.location?.name &&
+                  selectedStory.location.name.trim() !== selectedStory.title.trim() ? (
+                    <p className="story-location-sub">{selectedStory.location.name}</p>
+                  ) : null}
                 </div>
               </div>
-              
-              {selectedStory.tagline && (
+
+              {selectedStory.tagline ? (
                 <p className="story-tagline">{selectedStory.tagline}</p>
-              )}
-              
-              {selectedStory.summary && (
+              ) : null}
+
+              {selectedStory.summary ? (
                 <p className="story-summary">{selectedStory.summary}</p>
-              )}
-              
-              {selectedStory.themes && selectedStory.themes.length > 0 && (
+              ) : null}
+
+              {selectedStory.themes && selectedStory.themes.length > 0 ? (
                 <div className="story-themes">
                   {selectedStory.themes.map((t, i) => (
-                    <span key={i} className="theme-tag">{t}</span>
+                    <span key={i} className="theme-tag">
+                      {t}
+                    </span>
                   ))}
                 </div>
-              )}
-              
-              {selectedStory.gallery && selectedStory.gallery.length > 0 && (
-                <button 
+              ) : null}
+
+              {selectedStory.gallery && selectedStory.gallery.length > 0 ? (
+                <button
+                  type="button"
                   className="open-story-btn"
                   onClick={() => handleOpenStory(selectedStory)}
                 >
-                  Leggi la storia
+                  <span>Leggi la storia</span>
+                  <span className="open-story-btn-icon" aria-hidden>
+                    →
+                  </span>
                 </button>
-              )}
+              ) : null}
             </>
           ) : (
-            <p className="no-selection">Seleziona una location</p>
+            <div className="no-selection">
+              <p className="no-selection-title">Nessuna location</p>
+              <p className="no-selection-hint">Gira il globo e scegli un punto, oppure usa l&apos;indice qui sotto.</p>
+            </div>
           )}
         </div>
 
         {/* Stories Menu */}
         <div className="stories-nav">
-          <button 
+          <button
+            type="button"
             className={`stories-toggle ${menuOpen ? 'is-open' : ''}`}
             onClick={() => setMenuOpen(!menuOpen)}
+            aria-expanded={menuOpen}
           >
-            <span>Storie</span>
-            <span className="toggle-icon">{menuOpen ? '−' : '+'}</span>
+            <span className="stories-toggle-label">
+              <span className="stories-toggle-title">Indice</span>
+              <span className="stories-toggle-meta">{stories.length} location</span>
+            </span>
+            <span className="toggle-icon" aria-hidden>
+              {menuOpen ? '−' : '+'}
+            </span>
           </button>
-          
-          {menuOpen && (
+
+          {menuOpen ? (
             <ul className="stories-list">
-              {stories.map((story) => {
+              {stories.map((story, index) => {
                 const color = story.markerColor || getStoryColor(story.id);
                 const isSelected = story.id === selectedStory?.id;
-                
+                const label = story.location?.name || story.title;
+                const sub =
+                  story.era?.trim() ||
+                  (story.title.trim() !== label.trim() ? story.title : '');
+
                 return (
                   <li key={story.id}>
                     <button
+                      type="button"
                       className={`story-item ${isSelected ? 'is-selected' : ''}`}
+                      style={{ '--story-accent': color || '#c2d3cd' } as React.CSSProperties}
                       onClick={() => handleSelectStory(story)}
                       onDoubleClick={() => handleOpenStory(story)}
                     >
+                      <span className="item-index" aria-hidden>
+                        {String(index + 1).padStart(2, '0')}
+                      </span>
                       <span className="item-dot" style={{ background: color || undefined }} />
-                      <span className="item-name">{story.location?.name || story.title}</span>
+                      <span className="item-text">
+                        <span className="item-name">{label}</span>
+                        {sub ? <span className="item-sub">{sub}</span> : null}
+                      </span>
                     </button>
                   </li>
                 );
               })}
             </ul>
-          )}
+          ) : null}
         </div>
       </aside>
 
@@ -211,17 +260,40 @@ export function HomePage() {
           onSelect={handleSelectStory}
           onOpen={handleOpenStory}
           resetViewKey={globeResetKey}
+          autoRotate={globeAutoRotate}
         />
-        
-        {/* Audio control */}
-        <button 
-          className="audio-control"
-          onClick={toggle}
-          disabled={!isReady}
-          title={isPlaying ? 'Disattiva audio' : 'Attiva audio'}
-        >
-          {isPlaying ? '♪' : '♪̸'}
-        </button>
+
+        <div className="globe-corner-controls" role="toolbar" aria-label="Controlli globo e audio">
+          <button
+            type="button"
+            className="globe-control-btn"
+            onClick={() => setGlobeAutoRotate((v) => !v)}
+            aria-pressed={!globeAutoRotate}
+            aria-label={
+              globeAutoRotate
+                ? 'Ferma la rotazione del globo'
+                : 'Riattiva la rotazione del globo'
+            }
+            title={globeAutoRotate ? 'Ferma la rotazione' : 'Riattiva la rotazione'}
+          >
+            <span className="globe-control-icon" aria-hidden>
+              {globeAutoRotate ? '⏸' : '↻'}
+            </span>
+          </button>
+          <button
+            type="button"
+            className="globe-control-btn"
+            onClick={toggle}
+            disabled={!isReady}
+            aria-pressed={!isPlaying}
+            aria-label={isPlaying ? 'Silenzia la musica' : 'Attiva la musica'}
+            title={isPlaying ? 'Silenzia musica' : 'Attiva musica'}
+          >
+            <span className="globe-control-icon" aria-hidden>
+              {isPlaying ? '♪' : '♪̸'}
+            </span>
+          </button>
+        </div>
       </main>
 
       {/* Fullscreen Reader */}

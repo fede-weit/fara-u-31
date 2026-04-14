@@ -14,6 +14,8 @@ interface GlobeProps {
 
 interface GlobeExtraProps {
   resetViewKey?: number;
+  /** When false, OrbitControls auto-rotate is off (user can still drag). Default true. */
+  autoRotate?: boolean;
 }
 
 interface StoryPoint {
@@ -25,7 +27,14 @@ interface StoryPoint {
 
 const DOUBLE_CLICK_MS = 450;
 
-export function Globe({ stories, selectedId, onSelect, onOpen, resetViewKey }: GlobeProps & GlobeExtraProps) {
+export function Globe({
+  stories,
+  selectedId,
+  onSelect,
+  onOpen,
+  resetViewKey,
+  autoRotate = true,
+}: GlobeProps & GlobeExtraProps) {
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [dims, setDims] = useState({ width: 600, height: 500 });
@@ -58,12 +67,18 @@ export function Globe({ stories, selectedId, onSelect, onOpen, resetViewKey }: G
   const setupControls = useCallback(() => {
     const ctrl = globeRef.current?.controls?.();
     if (!ctrl) return;
-    ctrl.autoRotate = true;
+    ctrl.autoRotate = autoRotate;
     ctrl.autoRotateSpeed = 0.35;
     ctrl.enableZoom = false;
     ctrl.enablePan = false;
     ctrl.rotateSpeed = 0.5;
-  }, []);
+  }, [autoRotate]);
+
+  useEffect(() => {
+    const ctrl = globeRef.current?.controls?.();
+    if (!ctrl) return;
+    ctrl.autoRotate = autoRotate;
+  }, [autoRotate]);
 
   useLayoutEffect(() => {
     const el = containerRef.current;
