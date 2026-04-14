@@ -36,6 +36,12 @@ export function HomePage() {
     autoplay: true,
   });
 
+  // One-screen home: no document scroll (panels scroll internally)
+  useEffect(() => {
+    document.documentElement.classList.add('home-viewport-lock');
+    return () => document.documentElement.classList.remove('home-viewport-lock');
+  }, []);
+
   // Select first story by default
   useEffect(() => {
     if (stories.length > 0 && !selectedStory) {
@@ -289,9 +295,7 @@ export function HomePage() {
             aria-label={isPlaying ? 'Silenzia la musica' : 'Attiva la musica'}
             title={isPlaying ? 'Silenzia musica' : 'Attiva musica'}
           >
-            <span className="globe-control-icon" aria-hidden>
-              {isPlaying ? '♪' : '♪̸'}
-            </span>
+            <GlobeVolumeIcon muted={!isPlaying} />
           </button>
         </div>
       </main>
@@ -304,5 +308,47 @@ export function HomePage() {
         />
       )}
     </div>
+  );
+}
+
+/** Apple-style speaker + waves / speaker + X (muted) */
+function GlobeVolumeIcon({ muted }: { muted: boolean }) {
+  return (
+    <svg
+      className="globe-volume-svg"
+      viewBox="0 0 24 24"
+      width="22"
+      height="22"
+      aria-hidden
+      focusable="false"
+    >
+      <polygon fill="currentColor" points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+      {muted ? (
+        <path
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.85"
+          strokeLinecap="round"
+          d="M16 9l6 6M22 9l-6 6"
+        />
+      ) : (
+        <>
+          <path
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.85"
+            strokeLinecap="round"
+            d="M15.54 8.46a5 5 0 0 1 0 7.07"
+          />
+          <path
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.85"
+            strokeLinecap="round"
+            d="M19.07 4.93a10 10 0 0 1 0 14.14"
+          />
+        </>
+      )}
+    </svg>
   );
 }

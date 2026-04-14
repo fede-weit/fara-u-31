@@ -37,6 +37,22 @@ body[data-theme="light"] {
   box-sizing: border-box;
 }
 
+/* Home route: lock document to viewport (no page scroll; inner panels scroll) */
+html.home-viewport-lock {
+  height: 100%;
+  overflow: hidden;
+}
+
+html.home-viewport-lock body {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+html.home-viewport-lock #root {
+  min-height: 0;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
