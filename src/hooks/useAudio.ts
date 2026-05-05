@@ -133,6 +133,19 @@ export function useAudio({ src, settings = {}, autoplay = true }: UseAudioOption
   // Initialize audio element
   useEffect(() => {
     setIsReady(false);
+    setIsPlaying(false);
+    hasFadeRef.current = false;
+
+    if (!src) {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = '';
+      }
+      audioRef.current = null;
+      sourceRef.current = null;
+      return;
+    }
+
     const audio = new Audio();
     audio.loop = resolvedSettings.loop;
     audio.volume = resolvedSettings.elementVolume;
@@ -154,10 +167,28 @@ export function useAudio({ src, settings = {}, autoplay = true }: UseAudioOption
 
     return () => {
       audio.pause();
+      audio.src = '';
       audio.removeEventListener('canplay', handleCanPlay);
       audio.removeEventListener('play', handlePlay);
       audio.removeEventListener('pause', handlePause);
       audio.removeEventListener('error', handleError);
+      if (sourceRef.current) {
+        try {
+          sourceRef.current.disconnect();
+        } catch {
+          // ignore
+        }
+      }
+      if (gainRef.current) {
+        try {
+          gainRef.current.disconnect();
+        } catch {
+          // ignore
+        }
+      }
+      sourceRef.current = null;
+      gainRef.current = null;
+      hasFadeRef.current = false;
       audioRef.current = null;
     };
   }, [src, resolvedSettings.loop, resolvedSettings.elementVolume, setupAudioChain]);

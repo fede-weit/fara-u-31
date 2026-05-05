@@ -11,9 +11,11 @@ export function HomePage() {
   const { stories, loading } = useStories();
   const [selectedStory, setSelectedStory] = useState<Story | null>(null);
   const [readerStory, setReaderStory] = useState<Story | null>(null);
+  const [isEnteringStory, setIsEnteringStory] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [globeResetKey, setGlobeResetKey] = useState(0);
   const [globeAutoRotate, setGlobeAutoRotate] = useState(true);
+  const transitionTimeoutRef = useRef<number | null>(null);
 
   // Helper to resolve public asset paths (same logic used elsewhere)
   function resolveAssetPath(path: string): string {
@@ -77,7 +79,15 @@ export function HomePage() {
       setCurrentAudioSettings(undefined);
     }
 
-    setReaderStory(story);
+    setIsEnteringStory(true);
+    if (transitionTimeoutRef.current !== null) {
+      window.clearTimeout(transitionTimeoutRef.current);
+    }
+    transitionTimeoutRef.current = window.setTimeout(() => {
+      setReaderStory(story);
+      setIsEnteringStory(false);
+      transitionTimeoutRef.current = null;
+    }, 420);
     setMenuOpen(false);
   }, [isPlaying, allowAutoplay]);
 
@@ -99,6 +109,14 @@ export function HomePage() {
     setGlobeResetKey((k) => k + 1);
   }, [wasPlayingBeforeReader, play]);
 
+  useEffect(() => {
+    return () => {
+      if (transitionTimeoutRef.current !== null) {
+        window.clearTimeout(transitionTimeoutRef.current);
+      }
+    };
+  }, []);
+
   // Ensure playback switches appropriately when reader opens
   useEffect(() => {
     if (readerStory) {
@@ -110,20 +128,23 @@ export function HomePage() {
   if (loading) {
     return (
       <div className="loading">
-        <p>Caricamento...</p>
+        <p>Loading...</p>
       </div>
     );
   }
 
   return (
-    <div className="home-layout">
+    <div className={`home-layout ${isEnteringStory ? 'is-entering-story' : ''}`}>
       {/* Left Panel - Info */}
       <aside className="info-panel">
-        <header className="branding">
-          <span className="world-label">Universo condiviso</span>
-          <h1>Relata Tales</h1>
-        </header>
+        <div className="info-panel-masthead">
+          <header className="branding">
+            <span className="world-label">Shared Universe</span>
+            <h1>fara u. 31</h1>
+          </header>
+        </div>
 
+        <div className="info-panel-body">
         {/* Story Info */}
         <div
           className="story-info"
@@ -138,7 +159,7 @@ export function HomePage() {
         >
           {selectedStory ? (
             <>
-              <p className="story-kicker">Location attiva</p>
+              <p className="story-kicker">Current location</p>
               <div className="story-header">
                 <span
                   className="story-dot"
@@ -184,23 +205,11 @@ export function HomePage() {
                 </div>
               ) : null}
 
-              {selectedStory.gallery && selectedStory.gallery.length > 0 ? (
-                <button
-                  type="button"
-                  className="open-story-btn"
-                  onClick={() => handleOpenStory(selectedStory)}
-                >
-                  <span>Leggi la storia</span>
-                  <span className="open-story-btn-icon" aria-hidden>
-                    →
-                  </span>
-                </button>
-              ) : null}
             </>
           ) : (
             <div className="no-selection">
-              <p className="no-selection-title">Nessuna location</p>
-              <p className="no-selection-hint">Gira il globo e scegli un punto, oppure usa l&apos;indice qui sotto.</p>
+              <p className="no-selection-title">No location selected</p>
+              <p className="no-selection-hint">Spin the globe and pick a point, or use the index below.</p>
             </div>
           )}
         </div>
@@ -214,8 +223,8 @@ export function HomePage() {
             aria-expanded={menuOpen}
           >
             <span className="stories-toggle-label">
-              <span className="stories-toggle-title">Indice</span>
-              <span className="stories-toggle-meta">{stories.length} location</span>
+              <span className="stories-toggle-title">Index</span>
+              <span className="stories-toggle-meta">{stories.length} locations</span>
             </span>
             <span className="toggle-icon" aria-hidden>
               {menuOpen ? '−' : '+'}
@@ -256,6 +265,7 @@ export function HomePage() {
             </ul>
           ) : null}
         </div>
+        </div>
       </aside>
 
       {/* Globe Panel */}
@@ -269,7 +279,7 @@ export function HomePage() {
           autoRotate={globeAutoRotate}
         />
 
-        <div className="globe-corner-controls" role="toolbar" aria-label="Controlli globo e audio">
+        <div className="globe-corner-controls" role="toolbar" aria-label="Globe and audio controls">
           <button
             type="button"
             className="globe-control-btn"
@@ -277,10 +287,10 @@ export function HomePage() {
             aria-pressed={!globeAutoRotate}
             aria-label={
               globeAutoRotate
-                ? 'Ferma la rotazione del globo'
-                : 'Riattiva la rotazione del globo'
+                ? 'Pause globe rotation'
+                : 'Resume globe rotation'
             }
-            title={globeAutoRotate ? 'Ferma la rotazione' : 'Riattiva la rotazione'}
+            title={globeAutoRotate ? 'Pause rotation' : 'Resume rotation'}
           >
             <span className="globe-control-icon" aria-hidden>
               {globeAutoRotate ? '⏸' : '↻'}
@@ -292,12 +302,27 @@ export function HomePage() {
             onClick={toggle}
             disabled={!isReady}
             aria-pressed={!isPlaying}
-            aria-label={isPlaying ? 'Silenzia la musica' : 'Attiva la musica'}
-            title={isPlaying ? 'Silenzia musica' : 'Attiva musica'}
+            aria-label={isPlaying ? 'Mute music' : 'Enable music'}
+            title={isPlaying ? 'Mute music' : 'Enable music'}
           >
             <GlobeVolumeIcon muted={!isPlaying} />
           </button>
         </div>
+
+        {selectedStory?.gallery && selectedStory.gallery.length > 0 ? (
+          <div className="globe-story-cta-wrap">
+            <button
+              type="button"
+              className="globe-story-cta"
+              onClick={() => handleOpenStory(selectedStory)}
+            >
+              <span>Visit location</span>
+              <span className="globe-story-cta-icon" aria-hidden>
+                →
+              </span>
+            </button>
+          </div>
+        ) : null}
       </main>
 
       {/* Fullscreen Reader */}

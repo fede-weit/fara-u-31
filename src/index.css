@@ -13,7 +13,9 @@
   --accent-shadow: rgba(86, 73, 76, 0.32);
   --button-active-text: #1a1618;
   --transition-fast: 180ms ease;
-  --font-sans: "Segoe UI", Tahoma, sans-serif;
+  --font-sans: "Outfit", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-ui: "Outfit", system-ui, -apple-system, sans-serif;
+  --font-display: "Fraunces", "Georgia", "Times New Roman", serif;
   font-size: 16px;
 }
 
@@ -56,7 +58,7 @@ html.home-viewport-lock #root {
 body {
   margin: 0;
   min-height: 100vh;
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
   background: radial-gradient(circle at 18% 12%, rgba(132, 126, 137, 0.22) 0%, transparent 45%),
     radial-gradient(circle at 75% 85%, rgba(194, 211, 205, 0.2) 0%, transparent 55%),
     var(--bg-main);
@@ -115,6 +117,8 @@ a:hover {
 
 .site-header h1 {
   margin: 0.35rem 0 0;
+  font-family: var(--font-display);
+  font-weight: 600;
   font-size: clamp(2.2rem, 5vw, 3.4rem);
   letter-spacing: -0.02em;
 }
@@ -305,6 +309,8 @@ a:hover {
 
 .panel-title {
   margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
   font-size: clamp(1.8rem, 4vw, 2.6rem);
   letter-spacing: -0.01em;
 }
@@ -447,6 +453,12 @@ a:hover {
   display: flex;
   flex-direction: column;
   gap: clamp(0.9rem, 2.5vw, 1.5rem);
+}
+
+.story-wrapper .story-header h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
 }
 
 .story-meta-line {

@@ -156,6 +156,11 @@
   color: #fff;
 }
 
+.nav-button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
 /* Instruction */
 .reader-instruction {
   position: absolute;
@@ -217,4 +222,14 @@
   .book-wrapper {
     padding: 60px 10px;
   }
+
+  .reader-close {
+    display: flex;
+    top: 12px;
+    right: 12px;
+    width: 42px;
+    height: 42px;
+    font-size: 20px;
+  }
+
 }

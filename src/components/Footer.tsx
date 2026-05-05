@@ -3,7 +3,7 @@ export function Footer() {
 
   return (
     <footer className="site-footer">
-      <p>&copy; {year} Relata Tales. Progetto scolastico.</p>
+      <p>&copy; {year} fara u. 31. School project.</p>
     </footer>
   );
 }

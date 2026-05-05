@@ -43,25 +43,17 @@ export function enrichStories(stories: Story[]): Story[] {
       };
     }
 
-    // Ensure locations are on land. If a location falls in water, snap it
-    // to the nearest land using our terrain generator.
+    // Keep locations on land, except for the explicitly underwater story.
     if (story.location) {
+      const isUnderwaterStory = story.location.name?.toLowerCase() === 'underwater';
+      if (isUnderwaterStory) {
+        return story;
+      }
       const { latitude, longitude } = story.location;
       if (!isLand(latitude, longitude)) {
         const newLoc = findNearestLand(latitude, longitude);
-        // annotate that we snapped it
-        (story.location as any).originalLatitude = latitude;
-        (story.location as any).originalLongitude = longitude;
         story.location.latitude = newLoc.latitude;
         story.location.longitude = newLoc.longitude;
-        (story.location as any).snappedToLand = true;
-        // Log for debugging so dev can see which stories were moved
-        try {
-          // eslint-disable-next-line no-console
-          console.debug(`story ${story.id} snapped to land: ${newLoc.latitude.toFixed(2)}, ${newLoc.longitude.toFixed(2)}`);
-        } catch (e) {
-          // ignore
-        }
       }
     }
 
@@ -77,7 +69,7 @@ export async function loadStories(): Promise<Story[]> {
     }
     return await response.json();
   } catch (error) {
-    console.error('Impossibile caricare stories.json', error);
+    console.error('Unable to load stories.json', error);
     return [];
   }
 }

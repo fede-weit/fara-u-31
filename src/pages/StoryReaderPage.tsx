@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { useTheme, useReadingMode, useAudio } from '../hooks';
+import { useTheme, useReadingMode, useAudio, THEME_STORAGE_KEY } from '../hooks';
 import type { Story, ReadingMode, ViewportMode, Theme } from '../types';
 
 interface SpreadMeta {
@@ -66,7 +66,7 @@ export function StoryReaderPage() {
         if (found) {
           setStory(found);
           // Apply preferred theme if no override
-          const storedTheme = localStorage.getItem('relata-theme');
+          const storedTheme = localStorage.getItem(THEME_STORAGE_KEY);
           if (!storedTheme && found.preferredTheme) {
             setTheme(found.preferredTheme, false);
           }
@@ -261,7 +261,7 @@ export function StoryReaderPage() {
   const getPageIndicatorText = () => {
     if (readingMode !== 'horizontal') {
       const total = gallery.length;
-      return total ? `${total} tavola${total === 1 ? '' : 'e'}` : '0 tavole';
+      return total ? `${total} page${total === 1 ? '' : 's'}` : '0 pages';
     }
 
     if (spreads.length === 0) return '0 / 0';
@@ -282,7 +282,7 @@ export function StoryReaderPage() {
   if (loading) {
     return (
       <div className="loading">
-        <p>Caricamento...</p>
+        <p>Loading...</p>
       </div>
     );
   }
@@ -290,11 +290,11 @@ export function StoryReaderPage() {
   if (!story) {
     return (
       <main className="story-wrapper">
-        <h1>Seleziona una storia</h1>
-        <p>Apri questa pagina utilizzando un id valido.</p>
-        <p>Controlla stories.json per gli identificativi disponibili.</p>
+        <h1>Select a story</h1>
+        <p>Open this page with a valid story id.</p>
+        <p>Check `stories.json` for available identifiers.</p>
         <Link to="/" className="back-link">
-          &larr; Torna alla mappa narrativa
+          &larr; Back to narrative map
         </Link>
       </main>
     );
@@ -303,24 +303,24 @@ export function StoryReaderPage() {
   return (
     <main className="story-wrapper">
       <Link to="/" className="back-link">
-        &larr; Torna alla mappa narrativa
+        &larr; Back to narrative map
       </Link>
 
       <header className="story-header">
         <h1>{story.title}</h1>
         <p className="story-meta-line">
-          <span>Epoca: <strong>{story.era ?? 'Epoca non definita'}</strong></span>
-          <span>Temi: <strong>{story.themes?.join(', ') ?? 'Nessun tema specificato'}</strong></span>
+          <span>Era: <strong>{story.era ?? 'Not specified'}</strong></span>
+          <span>Themes: <strong>{story.themes?.join(', ') ?? 'Not specified'}</strong></span>
         </p>
         <p>{story.summaryLong ?? story.summary}</p>
       </header>
 
       <section className="viewer-controls">
         <ToggleGroup
-          label="Modalita lettura:"
+          label="Reading mode:"
           options={[
-            { value: 'vertical', label: 'Scorrimento verticale' },
-            { value: 'horizontal', label: 'Lettura a pagine' },
+            { value: 'vertical', label: 'Vertical scroll' },
+            { value: 'horizontal', label: 'Paged view' },
           ]}
           value={readingMode}
           onChange={(v) => setReadingMode(v as ReadingMode)}
@@ -328,17 +328,17 @@ export function StoryReaderPage() {
 
         <div className="viewer-switches">
           <ToggleGroup
-            label="Tema:"
+            label="Theme:"
             options={[
-              { value: 'dark', label: 'Manga scuro' },
-              { value: 'light', label: 'Manga chiaro' },
+              { value: 'dark', label: 'Dark manga' },
+              { value: 'light', label: 'Light manga' },
             ]}
             value={theme}
             onChange={(v) => setTheme(v as Theme)}
           />
 
           <ToggleGroup
-            label="Anteprima:"
+            label="Viewport:"
             options={[
               { value: 'web', label: 'Desktop' },
               { value: 'mobile', label: 'Mobile' },
@@ -355,7 +355,7 @@ export function StoryReaderPage() {
           aria-pressed={!isPlaying}
           disabled={!isReady || !story.audio}
         >
-          {isPlaying ? 'Disattiva audio' : 'Riattiva audio'}
+          {isPlaying ? 'Mute audio' : 'Enable audio'}
         </button>
 
         {imageZoom > 1 && (
@@ -367,9 +367,9 @@ export function StoryReaderPage() {
               setZoomPanX(0);
               setZoomPanY(0);
             }}
-            title="Ripristina zoom"
+            title="Reset zoom"
           >
-            Ripristina zoom
+            Reset zoom
           </button>
         )}
       </section>
@@ -384,7 +384,7 @@ export function StoryReaderPage() {
             <figure key={index} data-page-index={index} className="story-image-container">
               <img
                 src={resolveAssetPath(page.src)}
-                alt={page.alt ?? `Tavola ${index + 1}`}
+                alt={page.alt ?? `Page ${index + 1}`}
                 loading="lazy"
                 decoding="async"
                 style={{
@@ -423,7 +423,7 @@ export function StoryReaderPage() {
                   <figure key={pageIndex} className="story-page story-image-container">
                     <img
                       src={resolveAssetPath(page.src)}
-                      alt={page.alt ?? `Tavola ${pageIndex + 1}`}
+                      alt={page.alt ?? `Page ${pageIndex + 1}`}
                       loading="lazy"
                       decoding="async"
                       style={{
@@ -448,9 +448,9 @@ export function StoryReaderPage() {
             className="page-control"
             onClick={() => changeSpread(currentSpreadIndex - 1)}
             disabled={currentSpreadIndex <= 0}
-            aria-label="Mostra la pagina precedente"
+            aria-label="Show previous page"
           >
-            Pagina precedente
+            Previous page
           </button>
           <span className="page-indicator">{getPageIndicatorText()}</span>
           <button
@@ -458,9 +458,9 @@ export function StoryReaderPage() {
             className="page-control"
             onClick={() => changeSpread(currentSpreadIndex + 1)}
             disabled={currentSpreadIndex >= spreads.length - 1}
-            aria-label="Mostra la pagina successiva"
+            aria-label="Show next page"
           >
-            Pagina successiva
+            Next page
           </button>
         </div>
       )}

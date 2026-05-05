@@ -252,10 +252,7 @@ export function Globe({
         pointLabel={(d: object) => {
           const { story } = d as StoryPoint;
           const name = story.location?.name || story.title;
-          const snapped = (story.location as { snappedToLand?: boolean })?.snappedToLand
-            ? '<br/><small>spostato sulla terraferma</small>'
-            : '';
-          return `<div style="padding:6px 10px;background:rgba(20,20,30,.92);color:#fff;border-radius:8px;font:600 12px system-ui">${name}${snapped}</div>`;
+          return `<div style="padding:6px 10px;background:rgba(20,20,30,.92);color:#fff;border-radius:8px;font:600 12px system-ui">${name}</div>`;
         }}
         onPointClick={handlePointClick}
         onGlobeReady={handleGlobeReady}

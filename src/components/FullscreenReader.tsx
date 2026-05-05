@@ -1,4 +1,4 @@
-import { useRef, useEffect, useCallback } from 'react';
+import { useRef, useEffect, useCallback, useMemo, useState } from 'react';
 import HTMLFlipBook from 'react-pageflip';
 import type { Story } from '../types';
 import './FullscreenReader.css';
@@ -20,8 +20,13 @@ function resolveAssetPath(path: string): string {
 export function FullscreenReader({ story, onClose }: FullscreenReaderProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const bookRef = useRef<any>(null);
+  const [currentPage, setCurrentPage] = useState(0);
 
   const gallery = story.gallery || [];
+  const renderedPageCount = useMemo(
+    () => gallery.length + (gallery.length > 1 && gallery.length % 2 !== 0 ? 1 : 0),
+    [gallery.length]
+  );
 
   // Enter fullscreen on mount
   useEffect(() => {
@@ -58,22 +63,6 @@ export function FullscreenReader({ story, onClose }: FullscreenReaderProps) {
     };
   }, [onClose]);
 
-  // Keyboard navigation
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        handleClose();
-      } else if (e.key === 'ArrowRight') {
-        bookRef.current?.pageFlip()?.flipNext();
-      } else if (e.key === 'ArrowLeft') {
-        bookRef.current?.pageFlip()?.flipPrev();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
-
   const handleClose = useCallback(async () => {
     try {
       if (document.fullscreenElement) {
@@ -87,13 +76,32 @@ export function FullscreenReader({ story, onClose }: FullscreenReaderProps) {
     onClose();
   }, [onClose]);
 
+  const canGoPrev = currentPage > 0;
+  const canGoNext = currentPage < renderedPageCount - 1;
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        handleClose();
+      } else if (e.key === 'ArrowRight' && canGoNext) {
+        bookRef.current?.pageFlip()?.flipNext();
+      } else if (e.key === 'ArrowLeft' && canGoPrev) {
+        bookRef.current?.pageFlip()?.flipPrev();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [canGoNext, canGoPrev, handleClose]);
+
   if (gallery.length === 0) {
     return (
       <div ref={containerRef} className="fullscreen-reader">
         <button className="reader-close" onClick={handleClose}>✕</button>
         <div className="reader-empty">
           <h2>{story.title}</h2>
-          <p>Questa storia non ha ancora tavole.</p>
+          <p>This story has no pages yet.</p>
         </div>
       </div>
     );
@@ -133,7 +141,7 @@ export function FullscreenReader({ story, onClose }: FullscreenReaderProps) {
       <button className="reader-close" onClick={handleClose}>
         ✕
       </button>
-
+      
       {/* Book */}
       <div className="book-wrapper">
         {/* @ts-ignore - react-pageflip types issue */}
@@ -161,13 +169,14 @@ export function FullscreenReader({ story, onClose }: FullscreenReaderProps) {
           startPage={0}
           showPageCorners={true}
           disableFlipByClick={false}
+          onFlip={(e: any) => setCurrentPage(e?.data ?? 0)}
         >
           {gallery.map((page, index) => (
             <div className="page" key={index}>
               <div className="page-content">
                 <img
                   src={resolveAssetPath(page.src)}
-                  alt={page.alt || `Pagina ${index + 1}`}
+                  alt={page.alt || `Page ${index + 1}`}
                   draggable={false}
                 />
               </div>
@@ -177,7 +186,7 @@ export function FullscreenReader({ story, onClose }: FullscreenReaderProps) {
           {gallery.length % 2 !== 0 && (
             <div className="page">
               <div className="page-content page-empty">
-                <span>Fine</span>
+                <span>The End</span>
               </div>
             </div>
           )}
@@ -189,20 +198,22 @@ export function FullscreenReader({ story, onClose }: FullscreenReaderProps) {
         <button 
           className="nav-button"
           onClick={() => bookRef.current?.pageFlip()?.flipPrev()}
+          disabled={!canGoPrev}
         >
-          ‹ Indietro
+          ‹ Previous
         </button>
         <button 
           className="nav-button"
           onClick={() => bookRef.current?.pageFlip()?.flipNext()}
+          disabled={!canGoNext}
         >
-          Avanti ›
+          Next ›
         </button>
       </div>
 
       {/* Instructions */}
       <div className="reader-instruction">
-        Trascina l'angolo delle pagine o usa le frecce
+        Drag page corners, use arrows, or tap the controls
       </div>
     </div>
   );

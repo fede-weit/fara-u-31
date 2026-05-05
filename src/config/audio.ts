@@ -11,7 +11,7 @@ export const AUDIO_CHAIN_DEFAULTS: Readonly<AudioSettings> = Object.freeze({
 
 export const HOME_AUDIO_CONFIG = {
   src: '/assets/audio/home/home-theme.mp3',
-  label: 'Tema principale della Relata',
+  label: 'Main theme of fara u. 31',
 } as const;
 
 export function resolveAudioSettings(overrides: Partial<AudioSettings> = {}): AudioSettings {

@@ -58,9 +58,9 @@ export function Header({
   return (
     <header className="site-header">
       <div className="branding">
-        <span className="world-label">Universo condiviso</span>
-        <h1>Relata Tales</h1>
-        <p className="tagline">Esplora otto storie in un unico pianeta narrativo</p>
+        <span className="world-label">Shared universe</span>
+        <h1>fara u. 31</h1>
+        <p className="tagline">Explore eight stories on a single narrative planet</p>
       </div>
       
       <div className="header-actions">
@@ -74,14 +74,14 @@ export function Header({
               aria-haspopup="true"
             >
               <span className="menu-icon">☰</span>
-              <span className="menu-label">Storie</span>
+              <span className="menu-label">Stories</span>
             </button>
             
             {menuOpen && (
               <div className="menu-dropdown">
                 <div className="menu-header">
-                  <span>Scegli una storia</span>
-                  <small>Clic per selezionare, doppio clic per aprire</small>
+                  <span>Choose a story</span>
+                  <small>Click to select, double-click to open</small>
                 </div>
                 <ul className="menu-list">
                   {stories.map((story) => {
@@ -119,9 +119,9 @@ export function Header({
         <button
           className="theme-toggle"
           onClick={onToggleTheme}
-          aria-label="Cambia tema"
+          aria-label="Change theme"
         >
-          Tema
+          Theme
         </button>
         
         <button

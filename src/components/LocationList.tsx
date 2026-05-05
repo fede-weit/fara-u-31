@@ -10,7 +10,7 @@ interface LocationListProps {
 
 export function LocationList({ stories, selectedId, onSelect, onOpen }: LocationListProps) {
   return (
-    <div className="globe-nav" aria-label="Seleziona una location anche da tastiera">
+    <div className="globe-nav" aria-label="Select a location using keyboard too">
       <ul className="location-list">
         {stories.map((story) => {
           const accentColor = story.markerColor || getStoryColor(story.id);

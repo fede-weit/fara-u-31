@@ -14,14 +14,14 @@ export function StoryPanel({ story }: StoryPanelProps) {
       <section className="story-panel" aria-live="polite">
         <div className="panel-header">
           <p className="panel-era"></p>
-          <h2 className="panel-title">Scegli una location sul globo</h2>
+          <h2 className="panel-title">Choose a location on the globe</h2>
         </div>
         <p className="panel-tagline"></p>
         <p className="panel-summary"></p>
         <ul className="panel-themes"></ul>
         <div className="panel-actions">
           <span className="panel-link" aria-disabled="true">
-            Apri la storia
+            Open story
           </span>
         </div>
       </section>
@@ -31,7 +31,7 @@ export function StoryPanel({ story }: StoryPanelProps) {
   return (
     <section className="story-panel" aria-live="polite">
       <div className="panel-header">
-        <p className="panel-era">{story.era ?? 'Era sconosciuta'}</p>
+        <p className="panel-era">{story.era ?? 'Unknown era'}</p>
         <h2 className="panel-title" style={{ color: accentColor ?? undefined }}>
           {story.title}
         </h2>
@@ -51,11 +51,11 @@ export function StoryPanel({ story }: StoryPanelProps) {
             to={`/story/${story.id}`}
             className="panel-link"
           >
-            Apri la storia
+            Open story
           </Link>
         ) : (
           <span className="panel-link" aria-disabled="true">
-            Apri la storia
+            Open story
           </span>
         )}
       </div>
