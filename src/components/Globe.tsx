@@ -192,6 +192,14 @@ export function Globe({
     runAutoRotateRamp(autoRotateRef.current);
   }, [resetViewKey, applyBaseControls, runAutoRotateRamp]);
 
+  // Spin and focus on the selected story when selection changes
+  useEffect(() => {
+    if (!selectedId) return;
+    const point = pointsData.find((p) => p.story.id === selectedId);
+    if (!point) return;
+    globeRef.current?.pointOfView({ lat: point.lat, lng: point.lng, altitude: 2.0 }, 1200);
+  }, [selectedId, pointsData]);
+
   const handleGlobeReady = useCallback(() => {
     globeReadyRef.current = true;
     applyBaseControls();

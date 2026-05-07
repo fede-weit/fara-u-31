@@ -322,7 +322,7 @@
     "summaryLong": "",
     "era": "",
     "themes": [],
-    "cover": "assets/images/stories/story-10/pagina-01.jpeg",
+    "cover": "assets/images/stories/story-10/pagina-01.jpg",
     "coverAlt": "Disegno storia What once was",
     "audio": "assets/audio/stories/Location_10_What_once_was.mp3",
     "audioLabel": "Tema di What once was",
@@ -337,7 +337,7 @@
     "preferredTheme": "dark",
     "gallery": [
       {
-        "src": "assets/images/stories/story-10/pagina-01.jpeg",
+        "src": "assets/images/stories/story-10/pagina-01.jpg",
         "alt": "Disegno storia What once was",
         "caption": ""
       }

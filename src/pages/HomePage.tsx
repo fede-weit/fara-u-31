@@ -139,8 +139,7 @@ export function HomePage() {
       <aside className="info-panel">
         <div className="info-panel-masthead">
           <header className="branding">
-            <span className="world-label">Shared Universe</span>
-            <h1>fara u. 31</h1>
+            <h1>FARA U. 31</h1>
           </header>
         </div>
 
