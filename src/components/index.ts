@@ -4,4 +4,5 @@ export { Globe } from './Globe';
 export { LocationList } from './LocationList';
 export { StoryPanel } from './StoryPanel';
 export { FullscreenReader } from './FullscreenReader';
+export { Preloader } from './Preloader';
 

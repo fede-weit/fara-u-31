@@ -10,6 +10,7 @@ interface GlobeProps {
   selectedId: string | null;
   onSelect: (story: Story) => void;
   onOpen: (story: Story) => void;
+  onDeselect?: () => void;
 }
 
 interface GlobeExtraProps {
@@ -30,6 +31,10 @@ const DOUBLE_CLICK_MS = 450;
 const AUTO_ROTATE_SPEED = 0.35;
 const SPEED_RAMP_MS = 900;
 
+function isMobileViewport(): boolean {
+  return window.innerWidth <= 900;
+}
+
 function easeOutCubic(t: number): number {
   return 1 - (1 - t) ** 3;
 }
@@ -39,6 +44,7 @@ export function Globe({
   selectedId,
   onSelect,
   onOpen,
+  onDeselect,
   resetViewKey,
   autoRotate = true,
 }: GlobeProps & GlobeExtraProps) {
@@ -47,7 +53,9 @@ export function Globe({
   const [dims, setDims] = useState({ width: 600, height: 500 });
 
   const autoRotateRef = useRef(autoRotate);
-  autoRotateRef.current = autoRotate;
+  useEffect(() => {
+    autoRotateRef.current = autoRotate;
+  }, [autoRotate]);
 
   const speedRafRef = useRef<number | null>(null);
   const globeReadyRef = useRef(false);
@@ -222,6 +230,12 @@ export function Globe({
     [onSelect, onOpen]
   );
 
+  const handleGlobeClick = useCallback(() => {
+    if (onDeselect) {
+      onDeselect();
+    }
+  }, [onDeselect]);
+
   return (
     <div
       ref={containerRef}
@@ -251,10 +265,12 @@ export function Globe({
         }}
         pointRadius={(d: object) => {
           const id = (d as StoryPoint).story.id;
+          const mobile = isMobileViewport();
+          if (mobile) return id === selectedId ? 2.2 : 1.8;
           return id === selectedId ? 1.55 : 1.2;
         }}
         pointResolution={18}
-        lineHoverPrecision={0.45}
+        lineHoverPrecision={isMobileViewport() ? 2 : 0.45}
         pointsMerge={false}
         pointsTransitionDuration={600}
         pointLabel={(d: object) => {
@@ -263,6 +279,7 @@ export function Globe({
           return `<div style="padding:6px 10px;background:rgba(20,20,30,.92);color:#fff;border-radius:8px;font:600 12px system-ui">${name}</div>`;
         }}
         onPointClick={handlePointClick}
+        onGlobeClick={handleGlobeClick}
         onGlobeReady={handleGlobeReady}
       />
     </div>

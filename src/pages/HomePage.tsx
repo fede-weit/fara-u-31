@@ -15,9 +15,9 @@ export function HomePage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [globeResetKey, setGlobeResetKey] = useState(0);
   const [globeAutoRotate, setGlobeAutoRotate] = useState(true);
+  const [mobileIndexOpen, setMobileIndexOpen] = useState(false);
   const transitionTimeoutRef = useRef<number | null>(null);
 
-  // Helper to resolve public asset paths (same logic used elsewhere)
   function resolveAssetPath(path: string): string {
     if (!path) return path;
     if (path.startsWith('/') || path.startsWith('data:') || path.startsWith('http')) {
@@ -26,9 +26,8 @@ export function HomePage() {
     return `/${path}`;
   }
 
-  // Current audio source/settings (we'll swap between home and story audio)
   const [currentAudioSrc, setCurrentAudioSrc] = useState<string>(HOME_AUDIO_CONFIG.src);
-  const [currentAudioSettings, setCurrentAudioSettings] = useState<any | undefined>(undefined);
+  const [currentAudioSettings, setCurrentAudioSettings] = useState<Partial<import('../types').AudioSettings> | undefined>(undefined);
   const [wasPlayingBeforeReader, setWasPlayingBeforeReader] = useState(false);
   const homeIntroPlayedRef = useRef(false);
 
@@ -38,20 +37,11 @@ export function HomePage() {
     autoplay: true,
   });
 
-  // One-screen home: no document scroll (panels scroll internally)
   useEffect(() => {
     document.documentElement.classList.add('home-viewport-lock');
     return () => document.documentElement.classList.remove('home-viewport-lock');
   }, []);
 
-  // Select first story by default
-  useEffect(() => {
-    if (stories.length > 0 && !selectedStory) {
-      setSelectedStory(stories[0]);
-    }
-  }, [stories, selectedStory]);
-
-  // Start home theme as soon as the shell is ready (still subject to browser autoplay rules).
   useEffect(() => {
     if (loading || readerStory || homeIntroPlayedRef.current) return;
     homeIntroPlayedRef.current = true;
@@ -62,15 +52,20 @@ export function HomePage() {
   const handleSelectStory = useCallback((story: Story) => {
     setSelectedStory(story);
     setMenuOpen(false);
+    setMobileIndexOpen(false);
+    setGlobeAutoRotate(false);
+  }, []);
+
+  const handleDeselect = useCallback(() => {
+    setSelectedStory(null);
+    setGlobeAutoRotate(true);
   }, []);
 
   const handleOpenStory = useCallback((story: Story) => {
-    // Save whether home audio was playing so we can restore it on close
     setWasPlayingBeforeReader(isPlaying);
 
     allowAutoplay();
 
-    // Switch audio source to the story's soundtrack (if any)
     if (story.audio) {
       setCurrentAudioSrc(resolveAssetPath(story.audio));
       setCurrentAudioSettings(story.audioSettings ?? undefined);
@@ -89,24 +84,22 @@ export function HomePage() {
       transitionTimeoutRef.current = null;
     }, 420);
     setMenuOpen(false);
+    setMobileIndexOpen(false);
   }, [isPlaying, allowAutoplay]);
 
   const handleCloseReader = useCallback(() => {
-    // Close reader
     setReaderStory(null);
 
-    // Restore home audio source
     setCurrentAudioSrc(HOME_AUDIO_CONFIG.src);
     setCurrentAudioSettings(undefined);
 
-    // If home audio was playing before opening the reader, resume it
     if (wasPlayingBeforeReader) {
-      // play() may be a no-op if autoplay is blocked; the hook will also attempt autoplay
       play();
     }
 
-    // Bump globe reset key so the globe will restore its initial camera/zoom
     setGlobeResetKey((k) => k + 1);
+    setGlobeAutoRotate(true);
+    setSelectedStory(null);
   }, [wasPlayingBeforeReader, play]);
 
   useEffect(() => {
@@ -117,10 +110,8 @@ export function HomePage() {
     };
   }, []);
 
-  // Ensure playback switches appropriately when reader opens
   useEffect(() => {
     if (readerStory) {
-      // Attempt to play story audio when reader opens
       play();
     }
   }, [readerStory, play]);
@@ -133,9 +124,13 @@ export function HomePage() {
     );
   }
 
+  const storyColor = selectedStory
+    ? selectedStory.markerColor || getStoryColor(selectedStory.id) || '#c2d3cd'
+    : '#c2d3cd';
+
   return (
     <div className={`home-layout ${isEnteringStory ? 'is-entering-story' : ''}`}>
-      {/* Left Panel - Info */}
+      {/* Desktop Left Panel */}
       <aside className="info-panel">
         <div className="info-panel-masthead">
           <header className="branding">
@@ -144,14 +139,12 @@ export function HomePage() {
         </div>
 
         <div className="info-panel-body">
-        {/* Story Info */}
         <div
           className="story-info"
           style={
             selectedStory
               ? ({
-                  '--story-accent':
-                    selectedStory.markerColor || getStoryColor(selectedStory.id) || '#c2d3cd',
+                  '--story-accent': storyColor,
                 } as React.CSSProperties)
               : undefined
           }
@@ -163,8 +156,7 @@ export function HomePage() {
                 <span
                   className="story-dot"
                   style={{
-                    background:
-                      selectedStory.markerColor || getStoryColor(selectedStory.id) || undefined,
+                    background: storyColor,
                   }}
                 />
                 <div className="story-header-text">
@@ -174,7 +166,7 @@ export function HomePage() {
                   <h2
                     className="story-title"
                     style={{
-                      color: selectedStory.markerColor || getStoryColor(selectedStory.id) || undefined,
+                      color: storyColor,
                     }}
                   >
                     {selectedStory.title}
@@ -213,7 +205,6 @@ export function HomePage() {
           )}
         </div>
 
-        {/* Stories Menu */}
         <div className="stories-nav">
           <button
             type="button"
@@ -274,9 +265,108 @@ export function HomePage() {
           selectedId={selectedStory?.id ?? null}
           onSelect={handleSelectStory}
           onOpen={handleOpenStory}
+          onDeselect={handleDeselect}
           resetViewKey={globeResetKey}
           autoRotate={globeAutoRotate}
         />
+
+        {/* Mobile branding overlay */}
+        <div className="mobile-branding">
+          <h1>FARA U. 31</h1>
+        </div>
+
+        {/* Mobile floating story card */}
+        {selectedStory && (
+          <div
+            className="mobile-story-card"
+            style={{ '--story-accent': storyColor } as React.CSSProperties}
+          >
+            <div className="mobile-story-card-header">
+              <span className="mobile-story-dot" style={{ background: storyColor }} />
+              <div className="mobile-story-card-text">
+                <h3 className="mobile-story-title" style={{ color: storyColor }}>
+                  {selectedStory.title}
+                </h3>
+                {selectedStory.location?.name &&
+                selectedStory.location.name.trim() !== selectedStory.title.trim() ? (
+                  <p className="mobile-story-location">{selectedStory.location.name}</p>
+                ) : null}
+              </div>
+              <button
+                type="button"
+                className="mobile-story-dismiss"
+                onClick={handleDeselect}
+                aria-label="Dismiss"
+              >
+                ✕
+              </button>
+            </div>
+            {selectedStory.gallery && selectedStory.gallery.length > 0 ? (
+              <button
+                type="button"
+                className="mobile-visit-btn"
+                onClick={() => handleOpenStory(selectedStory)}
+              >
+                <span>Visit location</span>
+                <span className="mobile-visit-arrow" aria-hidden>→</span>
+              </button>
+            ) : null}
+          </div>
+        )}
+
+        {/* Mobile index button */}
+        <button
+          type="button"
+          className="mobile-index-btn"
+          onClick={() => setMobileIndexOpen(true)}
+          aria-label="Location index"
+        >
+          <MobileIndexIcon />
+        </button>
+
+        {/* Mobile index drawer overlay */}
+        {mobileIndexOpen && (
+          <div className="mobile-index-overlay" onClick={() => setMobileIndexOpen(false)}>
+            <div className="mobile-index-drawer" onClick={(e) => e.stopPropagation()}>
+              <div className="mobile-index-header">
+                <h2>Locations</h2>
+                <button
+                  type="button"
+                  className="mobile-index-close"
+                  onClick={() => setMobileIndexOpen(false)}
+                >
+                  ✕
+                </button>
+              </div>
+              <ul className="mobile-index-list">
+                {stories.map((story, index) => {
+                  const color = story.markerColor || getStoryColor(story.id);
+                  const isSelected = story.id === selectedStory?.id;
+                  const label = story.location?.name || story.title;
+
+                  return (
+                    <li key={story.id}>
+                      <button
+                        type="button"
+                        className={`mobile-index-item ${isSelected ? 'is-selected' : ''}`}
+                        style={{ '--story-accent': color || '#c2d3cd' } as React.CSSProperties}
+                        onClick={() => handleSelectStory(story)}
+                      >
+                        <span className="item-index" aria-hidden>
+                          {String(index + 1).padStart(2, '0')}
+                        </span>
+                        <span className="item-dot" style={{ background: color || undefined }} />
+                        <span className="item-text">
+                          <span className="item-name">{label}</span>
+                        </span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          </div>
+        )}
 
         <div className="globe-corner-controls" role="toolbar" aria-label="Globe and audio controls">
           <button
@@ -308,6 +398,7 @@ export function HomePage() {
           </button>
         </div>
 
+        {/* Desktop-only visit CTA */}
         {selectedStory?.gallery && selectedStory.gallery.length > 0 ? (
           <div className="globe-story-cta-wrap">
             <button
@@ -335,7 +426,16 @@ export function HomePage() {
   );
 }
 
-/** Apple-style speaker + waves / speaker + X (muted) */
+function MobileIndexIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="3" y1="6" x2="21" y2="6" />
+      <line x1="3" y1="12" x2="21" y2="12" />
+      <line x1="3" y1="18" x2="21" y2="18" />
+    </svg>
+  );
+}
+
 function GlobeVolumeIcon({ muted }: { muted: boolean }) {
   return (
     <svg
