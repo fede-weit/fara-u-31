@@ -65,8 +65,8 @@
     "route": "stories/story-template.html#story-02",
     "location": {
       "name": "A vision",
-      "latitude": 13.0,
-      "longitude": -19.0
+      "latitude": 90,
+      "longitude": 0
     }
   },
   {
@@ -100,7 +100,7 @@
     "route": "stories/story-template.html#story-03",
     "location": {
       "name": "Desert",
-      "latitude": -2.0,
+      "latitude": 2.0,
       "longitude": -130.2
     }
   },
@@ -135,8 +135,8 @@
     "route": "stories/story-template.html#story-04",
     "location": {
       "name": "Peaks",
-      "latitude": -39.6,
-      "longitude": -45.8
+      "latitude": 0.6,
+      "longitude": 20.8
     }
   },
   {
@@ -170,8 +170,8 @@
     "route": "stories/story-template.html#story-05",
     "location": {
       "name": "Riva",
-      "latitude": 4.5,
-      "longitude": -39.2
+      "latitude": 23.5,
+      "longitude": -41.2
     }
   },
   {
@@ -205,8 +205,8 @@
     "route": "stories/story-template.html#story-06",
     "location": {
       "name": "Shrine",
-      "latitude": -50.8,
-      "longitude": 86.1
+      "latitude": 23.8,
+      "longitude": 98.1
     }
   },
   {
@@ -240,8 +240,8 @@
     "route": "stories/story-template.html#story-07",
     "location": {
       "name": "Swamp",
-      "latitude": -8.6,
-      "longitude": -10.2
+      "latitude": 22.6,
+      "longitude": -98.2
     }
   },
   {
@@ -276,7 +276,7 @@
     "location": {
       "name": "Fumes",
       "latitude": -14.0,
-      "longitude": -156.0
+      "longitude": -48.0
     }
   },
   {
@@ -310,7 +310,7 @@
     "route": "stories/story-template.html#story-09",
     "location": {
       "name": "Underwater",
-      "latitude": -44.9,
+      "latitude": -20.9,
       "longitude": 129.0
     }
   },
@@ -345,8 +345,8 @@
     "route": "stories/story-template.html#story-10",
     "location": {
       "name": "What once was",
-      "latitude": -63.4,
-      "longitude": 105.9
+      "latitude": -15.4,
+      "longitude": 20.9
     }
   }
 ]
