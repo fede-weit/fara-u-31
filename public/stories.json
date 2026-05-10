@@ -65,8 +65,8 @@
     "route": "stories/story-template.html#story-02",
     "location": {
       "name": "A vision",
-      "latitude": 90,
-      "longitude": 0
+      "latitude": 23.8,
+      "longitude": 98.1
     }
   },
   {
@@ -205,8 +205,8 @@
     "route": "stories/story-template.html#story-06",
     "location": {
       "name": "Shrine",
-      "latitude": 23.8,
-      "longitude": 98.1
+      "latitude": 90,
+      "longitude": 0
     }
   },
   {
